@@ -13,23 +13,53 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Vector">
+      <UniqueIdentifier>{7677e547-056a-4f31-bd9e-d3d7230e85f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Vector\Vector3">
+      <UniqueIdentifier>{77857379-7c5f-41b3-b38b-d52e30f5ae3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Vector\Vector">
+      <UniqueIdentifier>{961a917d-18bf-4c38-8a8d-5fd69343de80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Util">
+      <UniqueIdentifier>{9e4e2c41-54ff-40cb-9c21-606e792e515f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Util\Gnuplot">
+      <UniqueIdentifier>{73b5b781-88f5-4616-bff8-d8f46dfa8674}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LBM.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="vector3_private.h">
+      <Filter>ヘッダー ファイル\Vector\Vector3</Filter>
+    </ClInclude>
+    <ClInclude Include="vector3.h">
+      <Filter>ヘッダー ファイル\Vector\Vector3</Filter>
+    </ClInclude>
     <ClInclude Include="Vector.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Vector\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="GnuplotFileManager.h">
+      <Filter>ヘッダー ファイル\Util\Gnuplot</Filter>
+    </ClInclude>
+    <ClInclude Include="LBMFileManager.h">
+      <Filter>ヘッダー ファイル\Util\Gnuplot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LBM.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
+    <ClCompile Include="test.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="GnuplotFileManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="LBMFileManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

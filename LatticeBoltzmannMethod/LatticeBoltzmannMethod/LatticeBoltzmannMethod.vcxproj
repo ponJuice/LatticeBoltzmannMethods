@@ -110,13 +110,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GnuplotFileManager.h" />
     <ClInclude Include="LBM.h" />
+    <ClInclude Include="LBMFileManager.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="vector3.h" />
+    <ClInclude Include="vector3_private.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GnuplotFileManager.cpp" />
     <ClCompile Include="LBM.cpp" />
+    <ClCompile Include="LBMFileManager.cpp" />
     <ClCompile Include="test.cpp" />
-    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,13 +2,14 @@
 #include <stdexcept>
 #include <stdio.h>
 
+template<typename T>
 class CVector
 {
 public:
-	CVector();
-	virtual ~CVector();
-	virtual double get(int index) = 0;
-	virtual void setAt(int index, double value) = 0;
+	CVector() {};
+	virtual ~CVector() {};
+	virtual T get(int index) = 0;
+	virtual void setAt(int index, T value) = 0;
 	virtual void add(CVector* vec,CVector* out) = 0;
 	virtual int getDimention() = 0;
 	virtual void sub(CVector* vec,CVector* out) = 0;
@@ -37,24 +38,4 @@ private:
 
 /*----------------------------------------------*/
 
-};
-
-class CVector3 : public CVector {
-public:
-	enum Dim {
-		X = 0,
-		Y = 1,
-		Z = 2
-	};
-	double x = 0, y = 0, z = 0;
-	virtual double get(int index);
-	virtual void setAt(int index, double value);
-	virtual int getDimention();
-	virtual void add(CVector* vec, CVector* out);
-	virtual void sub(CVector* vec, CVector* out);
-	virtual void mult(double scalar,CVector* out);
-	virtual void div(double scalar,CVector* out);
-	virtual double dot(CVector* vec);
-	virtual void cross(CVector* operand, CVector* output);
-	virtual void copy(CVector* vec);
 };
