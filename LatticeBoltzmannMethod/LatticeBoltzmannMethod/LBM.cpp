@@ -15,8 +15,7 @@ CLBM::CLBM(LBMInfo lbm)
 	sos = as / sqrt(3.0);
 
 	//緩和時間の計算
-	double kvc = (info.cv*info.cld) / info.re;		//動粘性係数
-	rt = (3.0*kvc) / (as*info.deltaLength) + 0.5;
+	rt = (3.0*info.kvc*info.deltaTime)/(info.deltaLength*info.deltaLength) + 0.5;
 
 	//係数の設定
 	w = new double[info.directionNum];
@@ -68,21 +67,10 @@ CLBM::CLBM(LBMInfo lbm)
 		//圧力、速度、分布関数の初期化
 		init(&point[n]);
 	}
+	/****************************************/
 
 	//オブジェクト内の初期化
-	/*for (int x = 0; x < info.x; x++) {
-		for (int y = 0; y < info.y; y++) {
-			for (int z = 0; z < info.z; z++) {
-				if (isObject(x, y, z)) {
-					point[info.x * info.y * z + info.x * y + x].p = objectBound.p;
-					point[info.x * info.y * z + info.x * y + x].u.copy(&objectBound.u);
-					for (int a = 0; a < info.directionNum; a++) {
-						point[info.x * info.y * z + info.x * y + x].distribut[a] = objectBound.distribut[a];
-					}
-				}
-			}
-		}
-	}*/
+	initData();
 }
 
 
@@ -108,23 +96,6 @@ void CLBM::init(CLBM::Point* point) {
 	}
 }
 
-double CLBM::getValue(int x, int y, int z, int direct, CLBM::ACCESS type) {
-	if (x < 0 || x >= info.x || y < 0 || y >= info.y) {
-		//格子外を参照→境界条件で値を取得
-		return boundaryGet(x, y, z, direct, type);
-	}
-	/*else if (isObject(x, y, z)) {
-		//オブジェクト内
-		return 0;
-	}*/
-	else if (type == ACCESS::NOW) {
-		return point[info.x * info.y * z + info.x * y + x].distribut[direct];
-	}
-	else {
-		return point_next[info.x * info.y * z + info.x * y + x].distribut[direct];
-
-	}
-}
 
 void CLBM::setValue(int x, int y, int z, int direct, double value, CLBM::ACCESS type) {
 	if (x < 0 || x >= info.x || y < 0 || y >= info.y) {
@@ -139,17 +110,21 @@ void CLBM::setValue(int x, int y, int z, int direct, double value, CLBM::ACCESS 
 double CLBM::calcPeq(double pressure, CVector<double>* velocity, int a) {
 	double e_dot_u = e[a].dot(velocity);		//速度方向ベクトルと速度ベクトルの内積
 	//平衡分布関数
-	double peq = w[a] * (pressure + info.density * (e_dot_u
+	/*double peq = w[a] * (pressure + info.density * (e_dot_u
 		+ 1.5 * ((e_dot_u * e_dot_u) / (as * as))
-		- 0.5*velocity->dot(velocity)));
+		- 0.5*velocity->dot(velocity)));*/
+	//double peq = w[a] * (1.0 - 1.5 * (velocity->dot(velocity)) + 3.0 * e_dot_u + 4.5 * (e_dot_u * e_dot_u));
+	double peq = w[a] * pressure * (1.0
+		+ 3.0*e_dot_u
+		- 1.5*velocity->dot(velocity)
+		+ 4.5*e_dot_u*e_dot_u);
 	return peq;
 }
 
-double CLBM::calcPa(double peq, int x, int y, int z, int a) {
+double CLBM::calcPa(double peq,Point* point, int a) {
 	//Point* temp = getPoint(x, y, z, ACCESS::NOW);
 	//分布関数
-	return getValue(x,y,z,a,ACCESS::NOW)
-		- (1.0 / rt)*(getValue(x,y,z,a,ACCESS::NOW) - peq);
+	return point->distribut[a] - (1.0 / rt)*(point->distribut[a] - peq);
 }
 
 CLBM::Point* CLBM::getPoint(int x, int y, int z, CLBM::ACCESS type) {
@@ -178,6 +153,8 @@ void CLBM::calcStep_2() {
 	/すべての方向の値を求めたら
 	/その点での巨視的圧力と巨視的速度を計算する*/
 	
+	//printf("%d\n",stepNum);
+
 	//すべての格子点を走査する
 	for (int x = 0; x < info.x; x++) {
 		for (int y = 0; y < info.y; y++) {
@@ -186,8 +163,9 @@ void CLBM::calcStep_2() {
 				for (int a = 0; a < info.directionNum; a++) {
 					//まず計算に使用する格子点を取得する
 					int _x = x - e[a].get(CVector3<double>::Dim::X);
-					int _y = y + e[a].get(CVector3<double>::Dim::Y);
+					int _y = y - e[a].get(CVector3<double>::Dim::Y);
 					int _z = z - e[a].get(CVector3<double>::Dim::Z);
+					//printf("a:%d\n \tx:%d _x:%d\n\ty:%d _y:%d\n\tz:%d _z:%d\n",a,x, _x,y, _y,z, _z);
 					Point* p = getPoint(_x,_y,_z,ACCESS::NOW);
 					//平衡分布関数を計算する
 					double peq = 0;
@@ -195,17 +173,20 @@ void CLBM::calcStep_2() {
 					if (p != nullptr) {
 						peq = calcPeq(p->p, &p->u, a);
 						//分布関数を計算する
-						pa = calcPa(peq, _x, _y, _z, a);
+						pa = calcPa(peq,p, a);
 					}
 					else {
-						pa = getValue(x, y, z, invertVelocity(a), ACCESS::NOW);
+						pa = getPoint(x, y, z, ACCESS::NOW)->distribut[invertVelocity(a)];
 					}
+					//printf("peq %d : %f  pa : %f",a, peq,pa);
+					//printf("\n");
 					//次の時間に格納
 					setValue(x, y, z, a, pa, ACCESS::NEXT);
 				}
 				//すべての方向の分布関数が求まったら、巨視的速度と巨視的密度を計算
 				calcPressAndVelocity(x, y, z,ACCESS::NEXT);
 			}
+			//printf("\n");
 		}
 	}
 	//参照を交互に入れ替えることで時間を進ませる
@@ -214,6 +195,49 @@ void CLBM::calcStep_2() {
 	point_next = p_temp;
 
 	stepNum++;
+}
+
+void CLBM::initData() {
+
+	//すべての格子点を走査する
+	for (int x = 0; x < info.x; x++) {
+		for (int y = 0; y < info.y; y++) {
+			for (int z = 0; z < info.z; z++) {
+				//方向に関して計算する
+				for (int a = 0; a < info.directionNum; a++) {
+					//まず計算に使用する格子点を取得する
+					int _x = x - e[a].get(CVector3<double>::Dim::X);
+					int _y = y - e[a].get(CVector3<double>::Dim::Y);
+					int _z = z - e[a].get(CVector3<double>::Dim::Z);
+					//printf("a:%d\n \tx:%d _x:%d\n\ty:%d _y:%d\n\tz:%d _z:%d\n",a,x, _x,y, _y,z, _z);
+					Point* p = getPoint(_x, _y, _z, ACCESS::NOW);
+					//平衡分布関数を計算する
+					double peq = 0;
+					double pa = 0;
+					if (p != nullptr) {
+						peq = calcPeq(p->p, &p->u, a);
+						//分布関数を計算する
+						pa = calcPa(peq, p, a);
+					}
+					else {
+						pa = getPoint(x, y, z, ACCESS::NOW)->distribut[invertVelocity(a)];
+					}
+					//次の時間に格納
+					setValue(x, y, z, a, pa, ACCESS::NEXT);
+				}
+				//すべての方向の分布関数が求まったら、巨視的速度と巨視的密度を計算
+				calcPressAndVelocity(x, y, z, ACCESS::NEXT);
+			}
+			//printf("\n");
+		}
+	}
+	for (int n = 0; n < info.x * info.y * info.z; n++) {
+		point_next[n].p = point[n].p;
+		point_next[n].u.copy(&point[n].u);
+		for (int a = 0; a < info.directionNum; a++) {
+			point_next[n].distribut[a] = point[n].distribut[a];
+		}
+	}
 }
 
 void CLBM::calcPressAndVelocity(int x, int y, int z,CLBM::ACCESS type) {
@@ -227,14 +251,14 @@ void CLBM::calcPressAndVelocity(int x, int y, int z,CLBM::ACCESS type) {
 		p->p += p->distribut[a];
 		//巨視的速度の計算
 		e[a].mult(p->distribut[a], &temp);
-		p->u.add(&temp, &(p->u));
+		p->u.add(&temp);
 	}
 	//巨視的速度の計算
-	p->u.div(info.density*sos, &(p->u));
+	p->u.div(info.density*(sos*sos), &(p->u));
 }
 
 void CLBM::calcStep() {
-	double p = 0;
+	/*double p = 0;
 	CVector3<double> u,temp;
 	for (int x = 0; x < info.x; x++) {
 		for (int y = 0; y < info.y; y++) {
@@ -264,30 +288,13 @@ void CLBM::calcStep() {
 				}
 			}
 		}
-	}
+	}*/
 	//参照を交互に入れ替えることで時間を進ませる
 	Point* p_temp = point;
 	point = point_next;
 	point_next = p_temp;
 
 	stepNum++;
-}
-
-double CLBM::boundaryGet(int x, int y, int z, int a,CLBM::ACCESS type) {
-	int _x = x, _y = y, _z = z;
-	//左右方向（周期境界）
-	if (x < 0 || x >= info.x) {
-		_x = info.x - std::abs(x);
-	}
-	//上下側(Y方向)条件(周期境界)
-	if (y < 0 || y >= info.y) {
-		//_y = info.y - std::abs(y);
-		_x = x + e[a].get(0);
-		_y = y - e[a].get(1);
-		_z = z;
-		return getPoint(_x, _y, _z,ACCESS::NOW)->distribut[invertVelocity(a)];
-	}
-	return getPoint(_x, _y, _z, type)->distribut[a];
 }
 
 int CLBM::invertVelocity(int a) {
@@ -317,14 +324,18 @@ CLBM::Point* CLBM::boundaryGet(int x, int y, int z,CLBM::ACCESS type) {
 	//左右は周期境界
 	if (x < 0 || x >= info.x) {
 		_x = info.x - abs(x);
-		return boundaryGet(_x, y, z, type);
+		//return boundaryGet(_x, y, z, type);
 	}
-	else if (y < 0 || y >= info.y) {
-		return nullptr;
+	if (y < 0 || y >= info.y) {
+		//return nullptr;
+		//テスト　周期境界
+		_y = info.y - abs(y);
+		//return boundaryGet(x, _y, z, type);
 	}
-	else {
+	/*else {
 		return getPoint(x, y, z,type);
-	}
+	}*/
+	return getPoint(_x, _y, z, type);
 }
 
 CLBM::Point * CLBM::objectBoundyGet(int x, int y, int z, ACCESS type)

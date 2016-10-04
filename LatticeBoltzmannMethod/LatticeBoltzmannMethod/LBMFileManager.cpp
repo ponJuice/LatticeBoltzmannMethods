@@ -21,14 +21,14 @@ CGnuplotFileManager::FILE CLBMFileManager::writeColorMap(string * fileName, CLBM
 	for (int x = 1; x <= info.x;x++) {
 		for (int y = 1; y <= info.y;y++) {
 			if (type == TYPE::PRESSURE) {
-				(*ofs) << x << " " << y << " " << lbm->getPoint(x - 1, y - 1, 0, CLBM::ACCESS::NOW)->p << std::endl;
+				(*ofs) << info.deltaLength*x << " " << info.deltaLength*y << " " << lbm->getPoint(x - 1, y - 1, 0, CLBM::ACCESS::NOW)->p << std::endl;
 				if ((y + 1) > info.y)
 					(*ofs) << endl;
 			}
 			else if(x % 5 == 0 && y % 5 == 0){
 				(*ofs) << 
-					x << " " << 
-					y << " " << 
+					info.deltaLength*x << " " << 
+					info.deltaLength*y << " " << 
 					lbm->getPoint(x-1, y-1, 0, CLBM::ACCESS::NOW)->u.get(CVector3<int>::Dim::X) << " " <<
 					lbm->getPoint(x-1, y-1, 0, CLBM::ACCESS::NOW)->u.get(CVector3<int>::Dim::Y) <<
 					std::endl;

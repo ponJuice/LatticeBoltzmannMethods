@@ -11,6 +11,7 @@ public:
 	virtual T get(int index) = 0;
 	virtual void setAt(int index, T value) = 0;
 	virtual void add(CVector* vec,CVector* out) = 0;
+	virtual void add(CVector* vec) = 0;
 	virtual int getDimention() = 0;
 	virtual void sub(CVector* vec,CVector* out) = 0;
 	virtual void mult(double scalar,CVector* out) = 0;

@@ -49,6 +49,13 @@ void CVector3<T>::add(CVector* vec, CVector* out) {
 }
 
 template<typename T>
+void CVector3<T>::add(CVector* vec) {
+	setAt(Dim::X, get(Dim::X) + vec->get(Dim::X));
+	setAt(Dim::Y, get(Dim::Y) + vec->get(Dim::Y));
+	setAt(Dim::Z, get(Dim::Z) + vec->get(Dim::Z));
+}
+
+template<typename T>
 void CVector3<T>::sub(CVector* vec, CVector* out) {
 	CVector3<T> temp;
 	temp.setAt(Dim::X, x - vec->get(Dim::X));

@@ -19,6 +19,7 @@ public:
 	virtual void setAt(int index, T value);
 	virtual int getDimention();
 	virtual void add(CVector* vec, CVector* out);
+	virtual void add(CVector* vec);
 	virtual void sub(CVector* vec, CVector* out);
 	virtual void mult(double scalar, CVector* out);
 	virtual void div(double scalar, CVector* out);
