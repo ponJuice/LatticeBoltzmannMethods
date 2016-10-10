@@ -78,8 +78,8 @@ void lbmThread() {
 	vel.set(1, 0, 0);
 
 	CLBM::LBMInfo info;
-	info.x = 500;
-	info.y = 500;
+	info.x = 2;
+	info.y = 2;
 	info.z = 1;
 	info.directionNum = 9;
 	info.cld = 1.0;	//0.1[m]

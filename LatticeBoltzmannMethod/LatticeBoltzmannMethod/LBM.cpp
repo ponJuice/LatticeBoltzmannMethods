@@ -1,5 +1,5 @@
 #include "LBM.h"
-
+#include "Debug.h"
 
 
 CLBM::CLBM(LBMInfo lbm)
@@ -69,6 +69,33 @@ CLBM::CLBM(LBMInfo lbm)
 	}
 	/****************************************/
 
+	/******debug init*******/
+	/*int total = 1;
+	for (int y = 0; y < info.y; y++) {
+		for (int x = 0; x < info.x; x++) {
+			int index = info.x * y + x;
+			for (int a = 0; a < info.directionNum; a++) {
+				DebugDistribut dd;
+				dd.id[0] = x;
+				dd.id[1] = y;
+				dd.id[2] = a;
+				point[index].distribut[a] = dd.all;
+			}
+			point[index].p = total;
+			point[index].u.set(total, total, total);
+			total++;
+		}
+	}*/
+
+	/*for (int x = 0; x < info.y; x++) {
+		for (int y = 0; y < info.x; y++) {
+			int index = info.x * y + x;
+			Debug::debugOutputInfo(&point[index]);
+		}
+	}*/
+
+
+
 	//オブジェクト内の初期化
 	initData();
 }
@@ -110,21 +137,22 @@ void CLBM::setValue(int x, int y, int z, int direct, double value, CLBM::ACCESS 
 double CLBM::calcPeq(double pressure, CVector<double>* velocity, int a) {
 	double e_dot_u = e[a].dot(velocity);		//速度方向ベクトルと速度ベクトルの内積
 	//平衡分布関数
-	/*double peq = w[a] * (pressure + info.density * (e_dot_u
+	double peq = w[a] * (pressure + info.density * (e_dot_u
 		+ 1.5 * ((e_dot_u * e_dot_u) / (as * as))
-		- 0.5*velocity->dot(velocity)));*/
+		- 0.5*velocity->dot(velocity)));
 	//double peq = w[a] * (1.0 - 1.5 * (velocity->dot(velocity)) + 3.0 * e_dot_u + 4.5 * (e_dot_u * e_dot_u));
-	double peq = w[a] * pressure * (1.0
+	/*double peq = w[a] * pressure * (1.0
 		+ 3.0*e_dot_u
 		- 1.5*velocity->dot(velocity)
-		+ 4.5*e_dot_u*e_dot_u);
+		+ 4.5*e_dot_u*e_dot_u);*/
 	return peq;
 }
 
 double CLBM::calcPa(double peq,Point* point, int a) {
 	//Point* temp = getPoint(x, y, z, ACCESS::NOW);
 	//分布関数
-	return point->distribut[a] - (1.0 / rt)*(point->distribut[a] - peq);
+	double pa = point->distribut[a] - (1.0 / rt)*(point->distribut[a] - peq);
+	return pa;
 }
 
 CLBM::Point* CLBM::getPoint(int x, int y, int z, CLBM::ACCESS type) {
@@ -167,6 +195,7 @@ void CLBM::calcStep_2() {
 					int _z = z - e[a].get(CVector3<double>::Dim::Z);
 					//printf("a:%d\n \tx:%d _x:%d\n\ty:%d _y:%d\n\tz:%d _z:%d\n",a,x, _x,y, _y,z, _z);
 					Point* p = getPoint(_x,_y,_z,ACCESS::NOW);
+					Debug::debugOutputCalcInfo(x,y,z,a,_x,_y,_z,p);
 					//平衡分布関数を計算する
 					double peq = 0;
 					double pa = 0;
@@ -174,6 +203,8 @@ void CLBM::calcStep_2() {
 						peq = calcPeq(p->p, &p->u, a);
 						//分布関数を計算する
 						pa = calcPa(peq,p, a);
+						//debug
+						//pa = getPoint(x, y, z, ACCESS::NOW)->distribut[a];
 					}
 					else {
 						pa = getPoint(x, y, z, ACCESS::NOW)->distribut[invertVelocity(a)];
@@ -258,7 +289,7 @@ void CLBM::calcPressAndVelocity(int x, int y, int z,CLBM::ACCESS type) {
 }
 
 void CLBM::calcStep() {
-	/*double p = 0;
+	double p = 0;
 	CVector3<double> u,temp;
 	for (int x = 0; x < info.x; x++) {
 		for (int y = 0; y < info.y; y++) {
@@ -277,7 +308,7 @@ void CLBM::calcStep() {
 				for (int a = 0; a < info.directionNum; a++) {
 					double peq = calcPeq(p, &u, a);
 					//平衡関数
-					double pa = calcPa(peq, x, y, z, a);
+					double pa = calcPa(peq, getPoint(x,y,z,NOW) ,a);
 					//次の時間に値を代入
 					setValue(x + e[a].get(CVector3<int>::Dim::X),
 						y + e[a].get(CVector3<int>::Dim::Y),
@@ -288,7 +319,7 @@ void CLBM::calcStep() {
 				}
 			}
 		}
-	}*/
+	}
 	//参照を交互に入れ替えることで時間を進ませる
 	Point* p_temp = point;
 	point = point_next;

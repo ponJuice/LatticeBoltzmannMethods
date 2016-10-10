@@ -1,11 +1,18 @@
-﻿  LBMFileManager.cpp
+﻿  LBM.cpp
+c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbm.cpp(193): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbm.cpp(194): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbm.cpp(195): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbm.cpp(240): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbm.cpp(241): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbm.cpp(242): warning C4244: '初期化中': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbm.cpp(318): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
 c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(70): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
   c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(68): note: クラス テンプレート のメンバー関数 'void CVector3<int>::mult(double,CVector<T> *)' のコンパイル中
           with
           [
               T=int
           ]
-  c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbmfilemanager.cpp(32): note: コンパイル対象のクラス テンプレート インスタンス化 'CVector3<int>' のリファレンスを確認してください
+  c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\debug.h(22): note: コンパイル対象のクラス テンプレート インスタンス化 'CVector3<int>' のリファレンスを確認してください
 c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(71): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
 c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(72): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
 c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(81): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
@@ -16,6 +23,6 @@ c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latti
           ]
 c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(82): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
 c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(83): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbmfilemanager.cpp(39): warning C4715: 'CLBMFileManager::writeColorMap': 値を返さないコントロール パスがあります。
+c:\users\goto\documents\visual studio 2015\projects\latticeboltzmannmethod\latticeboltzmannmethod\lbm.cpp(351): warning C4715: 'CLBM::invertVelocity': 値を返さないコントロール パスがあります。
   LatticeBoltzmannMethod.vcxproj -> C:\Users\Goto\documents\visual studio 2015\Projects\LatticeBoltzmannMethod\Debug\LatticeBoltzmannMethod.exe
   LatticeBoltzmannMethod.vcxproj -> C:\Users\Goto\documents\visual studio 2015\Projects\LatticeBoltzmannMethod\Debug\LatticeBoltzmannMethod.pdb (Partial PDB)

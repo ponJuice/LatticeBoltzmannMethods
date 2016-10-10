@@ -32,8 +32,9 @@ CGnuplotFileManager::FILE CLBMFileManager::writeColorMap(string * fileName, CLBM
 					lbm->getPoint(x-1, y-1, 0, CLBM::ACCESS::NOW)->u.get(CVector3<int>::Dim::X) << " " <<
 					lbm->getPoint(x-1, y-1, 0, CLBM::ACCESS::NOW)->u.get(CVector3<int>::Dim::Y) <<
 					std::endl;
-
 			}
+			if(type == TYPE::VELOCITY)
+				printf("%2d , %2d , %5f , %5f\n", x, y, lbm->getPoint(x - 1, y - 1, 0, CLBM::ACCESS::NOW)->u.get(CVector3<int>::Dim::X), lbm->getPoint(x - 1, y - 1, 0, CLBM::ACCESS::NOW)->u.get(CVector3<int>::Dim::Y));
 		}
 	}
 }

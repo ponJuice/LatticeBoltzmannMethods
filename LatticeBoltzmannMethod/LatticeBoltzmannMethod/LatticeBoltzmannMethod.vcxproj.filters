@@ -28,6 +28,9 @@
     <Filter Include="ヘッダー ファイル\Util\Gnuplot">
       <UniqueIdentifier>{73b5b781-88f5-4616-bff8-d8f46dfa8674}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Debug">
+      <UniqueIdentifier>{9683500b-10f6-4f5c-9468-59a23faf40e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LBM.h">
@@ -47,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="LBMFileManager.h">
       <Filter>ヘッダー ファイル\Util\Gnuplot</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>ヘッダー ファイル\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
