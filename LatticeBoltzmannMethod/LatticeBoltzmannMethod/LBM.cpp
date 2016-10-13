@@ -193,9 +193,12 @@ void CLBM::calcStep_2() {
 					int _x = x - e[a].get(CVector3<double>::Dim::X);
 					int _y = y - e[a].get(CVector3<double>::Dim::Y);
 					int _z = z - e[a].get(CVector3<double>::Dim::Z);
-					//printf("a:%d\n \tx:%d _x:%d\n\ty:%d _y:%d\n\tz:%d _z:%d\n",a,x, _x,y, _y,z, _z);
+					//printf("a:%d\n \tx:%d _x:%d\n\ty:%d _y:%d\n\tz:%d _z:%d\n",a,x, _x,y, _y,z, _z)
+					//printf("/* ------- info start ------- */\n");
+					Debug::debugOutputLatticeInfo(x, y, z, a, _x, _y, _z);
 					Point* p = getPoint(_x,_y,_z,ACCESS::NOW);
-					Debug::debugOutputCalcInfo(x,y,z,a,_x,_y,_z,p);
+					Debug::debugOutputPointInfo(p);
+					//printf("/* ------- info end ------- */\n\n");
 					//ïΩçtï™ïzä÷êîÇåvéZÇ∑ÇÈ
 					double peq = 0;
 					double pa = 0;
@@ -366,7 +369,8 @@ CLBM::Point* CLBM::boundaryGet(int x, int y, int z,CLBM::ACCESS type) {
 	/*else {
 		return getPoint(x, y, z,type);
 	}*/
-	return getPoint(_x, _y, z, type);
+	Debug::debugOutputBoundaryInfo(x, y, z, _x, _y, _z);
+	return getPoint(_x, _y, _z, type);
 }
 
 CLBM::Point * CLBM::objectBoundyGet(int x, int y, int z, ACCESS type)

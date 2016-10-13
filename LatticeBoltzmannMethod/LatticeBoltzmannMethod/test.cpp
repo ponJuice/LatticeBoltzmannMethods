@@ -93,7 +93,7 @@ void lbmThread() {
 	info.kvc = 1.512e-5;
 	CLBM lbm(info);
 
-	
+	int writeRate = 1;
 
 	printf("初期化終了\n");
 	int index = 0;
@@ -109,12 +109,12 @@ void lbmThread() {
 			break;
 		/*排他制御*/
 
-		//if (n % (360 / 12) == 0) {
+		if (n % writeRate == 0) {
 			fm.writeColorMap(&press[index].str(), &lbm, info, CLBMFileManager::TYPE::PRESSURE);
 			fm.writeColorMap(&velocity[index].str(), &lbm, info, CLBMFileManager::TYPE::VELOCITY);
 			printf("%dステップ終了(%d)\n", n,index);
 			index++;
-		//}
+		}
 		lbm.calcStep_2();
 	}
 
