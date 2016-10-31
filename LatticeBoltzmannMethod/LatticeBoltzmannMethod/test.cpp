@@ -11,6 +11,7 @@
 void lbmThread();
 
 volatile bool stop;
+volatile char command;
 std::mutex mtx;
 
 void dispPoint(CLBM::Point* point){
@@ -18,44 +19,25 @@ void dispPoint(CLBM::Point* point){
 	for (int n = 0; n < 9; n++) {
 		printf("\t%d:%f\n", n, point->distribut[n]);
 	}
-	printf("p:%f\n",point->p);
-	printf("vect:(%f,%f,%f)]\n",point->u.get(0), point->u.get(1), point->u.get(1));
+	printf("density:%f\n",point->density);
+	printf("vect:(%f,%f,%f)]\n",point->velocity.get(0), point->velocity.get(1), point->velocity.get(2));
 }
 
 void main() {
 
-	/*CVector3<double> vel;
-	vel.set(0.1, 0, 0);
-
-	CLBM::LBMInfo info;
-	info.x = 2;
-	info.y = 2;
-	info.z = 1;
-	info.directionNum = 9;
-	info.cld = 0.5;	//0.1[m]
-	info.cv = 0.00;	//1 [m/s]
-	info.deltaLength = info.cld / info.x;
-	info.deltaTime = 1.0e-6;
-	info.density = 1.205;
-	info.velocity = &vel;
-	info.pressure = 1.0 / 3.0;
-	info.re = 400.0;
-	info.kvc = 1.512e-5;
-	CLBM lbm(info);
-
-	//CLBM::Point* p = lbm.getPoint(50, -1, 0, CLBM::ACCESS::NOW);
-	lbm.calcStep_2();
-	//dispPoint(p);
-
-	getchar();
-
-	return;*/
-
 	stop = false;
 
 	auto thread = std::thread([] {lbmThread(); });
-	getchar();
 	
+	char buff;
+	while((buff = getchar()) != 'e'){
+		if (buff == 's') {
+			mtx.lock();
+			command = buff;
+			mtx.unlock();
+		}
+	}
+
 	mtx.lock();
 	stop = true;
 	mtx.unlock();
@@ -65,32 +47,22 @@ void main() {
 
 void lbmThread() {
 	CLBMFileManager fm;
-	stringstream press[13];
-	stringstream velocity[13];
 
-	for (int n = 0; n < 13; n++) {
-		press[n] << "press_" << n << ".dat";
-		velocity[n] << "velocity_" << n << ".dat";
-		fm.openFile(&press[n].str(), CGnuplotFileManager::MODE::NEW);
-		fm.openFile(&velocity[n].str(), CGnuplotFileManager::MODE::NEW);
-	}
 	CVector3<double> vel;
-	vel.set(1, 0, 0);
+	vel.set(0.05, 0, 0);
 
 	CLBM::LBMInfo info;
-	info.x = 2;
-	info.y = 2;
+	info.x = 512;
+	info.y = 512;
 	info.z = 1;
 	info.directionNum = 9;
-	info.cld = 1.0;	//0.1[m]
-	info.cv = 1.0;	//1 [m/s]
-	info.deltaLength = 0.002;
-	info.deltaTime = 1.0e-4;
-	info.density = 1.205;
+	info.cld = 0.5;	//1[m]
+	info.cv = 1;	//1 [m/s]
+	info.deltaLength = info.cld / (double)info.x;
+	info.deltaTime = 1e-10;
+	info.density = 1.204;
 	info.velocity = &vel;
-	info.pressure = 0.327308;
-	info.re = 400.0;
-	info.kvc = 1.512e-5;
+	info.lambda = 68e-9;
 	CLBM lbm(info);
 
 	int writeRate = 1;
@@ -98,24 +70,38 @@ void lbmThread() {
 	printf("初期化終了\n");
 	int index = 0;
 	bool _stop;
-	for (int n = 0; n < 13; n++) {
-		
+	char _command;
+	int text_index = 0;
+	while (true)
+	{	
 		/*排他制御*/
 		mtx.lock();
 		_stop = stop;
+		_command = command;
+		command = 'n';
 		mtx.unlock();
-		
+
 		if (_stop)
 			break;
 		/*排他制御*/
 
-		if (n % writeRate == 0) {
-			fm.writeColorMap(&press[index].str(), &lbm, info, CLBMFileManager::TYPE::PRESSURE);
-			fm.writeColorMap(&velocity[index].str(), &lbm, info, CLBMFileManager::TYPE::VELOCITY);
-			printf("%dステップ終了(%d)\n", n,index);
-			index++;
+		if (_command == 's') {
+			//fm.writeColorMap(&press[index].str(), &lbm, info, CLBMFileManager::TYPE::PRESSURE);
+			//fm.writeColorMap(&velocity[text_index].str(), &lbm, info, CLBMFileManager::TYPE::VELOCITY);
+			string fileName = "vd_" + std::to_string(text_index) + ".dat";
+			fm.writeVelocityDistribution(&fileName, &lbm, info);
+			printf("セーブしました\n");
+			text_index++;
 		}
-		lbm.calcStep_2();
+		for (int n = 0; n < info.y; n += (info.y/15)) {
+			CLBM::Point* p = lbm.getPoint(info.x / 2, n, 0, CLBM::ACCESS::NOW);
+			printf("%3d : %g , %g\n", n, p->velocity.get(0), lbm.getPoint(info.x / 2, info.y - 1, 0, CLBM::ACCESS::NOW)->velocity.get(1));
+		}
+		printf("%3d : %g , %g\n", info.y-1, lbm.getPoint(info.x / 2, info.y-1, 0, CLBM::ACCESS::NOW)->velocity.get(0), lbm.getPoint(info.x / 2, info.y - 1, 0, CLBM::ACCESS::NOW)->velocity.get(1));
+		printf("%dステップ終了\n",index);
+		index++;
+		//}
+		lbm.calcStep();
 	}
 
 	printf("終了します\n");

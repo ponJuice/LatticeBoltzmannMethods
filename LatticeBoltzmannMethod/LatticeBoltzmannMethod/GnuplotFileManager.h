@@ -18,7 +18,6 @@ public: enum MODE{
 		OK
 	};
 protected:
-	unordered_map<string, ofstream*>* streams;
 	CGnuplotFileManager(const CGnuplotFileManager&) = delete;
 	CGnuplotFileManager& operator=(const CGnuplotFileManager&) = delete;
 	CGnuplotFileManager(CGnuplotFileManager&&) = delete;
@@ -29,6 +28,6 @@ public:
 	CGnuplotFileManager::FILE isOpen(string *fileName) const;
 	CGnuplotFileManager::FILE nextDataBlock(string *fileName) const;
 	CGnuplotFileManager::FILE writeData(string *fileName, double* data, int size) const;
-	CGnuplotFileManager::FILE openFile(string *fileName,MODE mode) const;
+	CGnuplotFileManager::FILE openFile(string *fileName,MODE mode,ofstream** ors) const;
 };
 

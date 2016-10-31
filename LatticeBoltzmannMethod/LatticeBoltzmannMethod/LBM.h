@@ -15,27 +15,22 @@ public:
 		int directionNum;		//速度ベクトルの数
 		double deltaTime;		//時間刻み
 		double deltaLength;		//空間刻み
-		double pressure;		//初期圧力
 		double density;			//初期密度
+		double lambda;			//平均自由行程
 		CVector3<double>* velocity;		//初期速度
 		double cld;				//代表長さ
 		double cv;				//代表速度
-		double re;				//レイノルズ数
-		double kvc;				//動粘性係数
 	}LBMInfo;
 
 	typedef struct {
 		double* distribut;	//方向の分布関数値
-		double p;			//巨視的圧力
-		CVector3<double> u;			//巨視的速度
+		double density;			//巨視的密度
+		CVector3<double> velocity;			//巨視的速度
 	}Point;
 
 	LBMInfo info;
-	double rt;				//緩和時間
-	double as;				//粒子の移流速度
-	double sos;				//音速
-	Point inflow;			//流入
-	Point objectBound;		//オブジェクトの境界用
+	double tau;				//緩和時間
+	double c;				//粒子の移流速度
 	Point* point;			//格子点上の値
 	Point* point_next;		//次の時間の値
 	CVector3<double>* e;	//速度方向ベクトル
@@ -44,19 +39,16 @@ public:
 public:
 	CLBM(LBMInfo lbm);
 	~CLBM();
-	void init(Point* point);
 	void setValue(int x, int y ,int z,int direct,double value,ACCESS type);
 	Point* getPoint(int x, int y, int z,ACCESS type);
 	//平衡分布関数
-	double calcPeq(double pressure, CVector<double>* velocity,int a);
+	double calcPeq(Point* point,int a);
 	//分布関数
 	double calcPa(double peq,Point* point,int a);
 	//巨視的圧力と巨視的速度の計算、設定
-	void calcPressAndVelocity(int x, int y, int z,ACCESS type);
+	void calcDensityAndVelocity(int x, int y, int z,ACCESS type);
 	//1ステップ計算
 	void calcStep();
-	//1ステップ計算
-	void calcStep_2();
 	//データの初期化
 	void initData();
 	//境界条件

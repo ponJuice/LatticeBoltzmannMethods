@@ -20,11 +20,11 @@ namespace Debug {
 			printf("y : %d | ", dd.id[1]);
 			printf("a : %d\n", dd.id[2]);
 		}
-		printf("p : %f\n", p->p);
+		printf("d : %f\n", p->density);
 		printf("v : %f , %f , %f"
-			, p->u.get(CVector3<int>::Dim::X)
-			, p->u.get(CVector3<int>::Dim::Y)
-			, p->u.get(CVector3<int>::Dim::Z));
+			, p->velocity.get(CVector3<int>::Dim::X)
+			, p->velocity.get(CVector3<int>::Dim::Y)
+			, p->velocity.get(CVector3<int>::Dim::Z));
 		printf("\n");
 		printf("\n");
 	}
@@ -57,11 +57,11 @@ namespace Debug {
 	void debugOutputPointInfo(CLBM::Point* p) {
 #ifdef POINT
 		printf(" --- point info ----\n");
-		printf("p : %f\n", p->p);
+		printf("d : %f\n", p->density);
 		printf("v : %f , %f , %f"
-			, p->u.get(CVector3<int>::Dim::X)
-			, p->u.get(CVector3<int>::Dim::Y)
-			, p->u.get(CVector3<int>::Dim::Z));
+			, p->velocity.get(CVector3<int>::Dim::X)
+			, p->velocity.get(CVector3<int>::Dim::Y)
+			, p->velocity.get(CVector3<int>::Dim::Z));
 		printf("\n");
 #endif
 	}
@@ -76,11 +76,11 @@ namespace Debug {
 		printf("_z : %2d |\n", _z);
 		DebugDistribut dd;
 		dd.all = p->distribut[a];
-		printf("p : %f\n", p->p);
+		printf("p : %f\n", p->density);
 		printf("v : %f , %f , %f"
-			, p->u.get(CVector3<int>::Dim::X)
-			, p->u.get(CVector3<int>::Dim::Y)
-			, p->u.get(CVector3<int>::Dim::Z));
+			, p->velocity.get(CVector3<int>::Dim::X)
+			, p->velocity.get(CVector3<int>::Dim::Y)
+			, p->velocity.get(CVector3<int>::Dim::Z));
 		printf("\n");
 		printf("\n");
 

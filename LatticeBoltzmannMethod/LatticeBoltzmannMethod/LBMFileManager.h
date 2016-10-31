@@ -12,5 +12,6 @@ public:
 	CLBMFileManager();
 	~CLBMFileManager();
 	CGnuplotFileManager::FILE writeColorMap(string *fileName, CLBM* lbm, CLBM::LBMInfo info,CLBMFileManager::TYPE type) const;
+	CGnuplotFileManager::FILE writeVelocityDistribution(string *fileName, CLBM* lbm, CLBM::LBMInfo info) const;
 };
 

@@ -1,21 +1,3 @@
-﻿  LBMFileManager.cpp
-c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(70): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-  c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(68): note: クラス テンプレート のメンバー関数 'void CVector3<int>::mult(double,CVector<T> *)' のコンパイル中
-          with
-          [
-              T=int
-          ]
-  c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\lbmfilemanager.cpp(33): note: コンパイル対象のクラス テンプレート インスタンス化 'CVector3<int>' のリファレンスを確認してください
-c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(71): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(72): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(81): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-  c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(77): note: クラス テンプレート のメンバー関数 'void CVector3<int>::div(double,CVector<T> *)' のコンパイル中
-          with
-          [
-              T=int
-          ]
-c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(82): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\vector3_private.h(83): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\goto\downloads\latticeboltzmannmethods-master\latticeboltzmannmethod\latticeboltzmannmethod\lbmfilemanager.cpp(41): warning C4715: 'CLBMFileManager::writeColorMap': 値を返さないコントロール パスがあります。
-  LatticeBoltzmannMethod.vcxproj -> C:\Users\Goto\Downloads\LatticeBoltzmannMethods-master\LatticeBoltzmannMethod\Debug\LatticeBoltzmannMethod.exe
-  LatticeBoltzmannMethod.vcxproj -> C:\Users\Goto\Downloads\LatticeBoltzmannMethods-master\LatticeBoltzmannMethod\Debug\LatticeBoltzmannMethod.pdb (Partial PDB)
+﻿  test.cpp
+  LatticeBoltzmannMethod.vcxproj -> C:\Users\Goto\Documents\Visual Studio 2015\Projects\LatticeBoltzmannMethod\Debug\LatticeBoltzmannMethod.exe
+  LatticeBoltzmannMethod.vcxproj -> C:\Users\Goto\Documents\Visual Studio 2015\Projects\LatticeBoltzmannMethod\Debug\LatticeBoltzmannMethod.pdb (Partial PDB)
