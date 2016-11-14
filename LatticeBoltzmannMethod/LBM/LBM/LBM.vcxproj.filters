@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="lbm_kernels.cu">
+      <Filter>LBM\code</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="LBM">
+      <UniqueIdentifier>{e9b86ed5-e40b-44fb-b849-a6623c99c79c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LBM\LBM_data">
+      <UniqueIdentifier>{fa534c52-7564-4779-abf0-37aa499bcd26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LBM\header">
+      <UniqueIdentifier>{c5de8385-f937-4ed6-a2e2-4f28390ef897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LBM\code">
+      <UniqueIdentifier>{14543e31-162b-425f-a955-9600c9dee4a7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lbm_data.h">
+      <Filter>LBM\LBM_data</Filter>
+    </ClInclude>
+    <ClInclude Include="lbm_kernels.cuh">
+      <Filter>LBM\header</Filter>
+    </ClInclude>
+    <ClInclude Include="lbm_util.h">
+      <Filter>LBM\header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="lbm_util.cpp">
+      <Filter>LBM\code</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
